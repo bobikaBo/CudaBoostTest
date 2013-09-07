@@ -9,6 +9,8 @@
 #include <thrust/replace.h>
 #include <thrust/functional.h>
 #include <thrust/count.h>
+#include <thrust/inner_product.h>
+#include <thrust/sort.h>
 
 #include <iostream>
 #include "Examples_Thrust.h"
@@ -96,13 +98,57 @@ void exmpl_thrust_reduce() {
     // put three 1s in a device_vector
     thrust::device_vector<int> vec(5,0);
     vec[1] = 1;
-    vec[3] = 1;
+    vec[3] = 2;
     vec[4] = 1;
 
     // count the 1s
-    int result = thrust::count(vec.begin(), vec.end(), 1);
-    std::cout << "Number of 1s in this vector: ";
+    int result_count = thrust::count(vec.begin(), vec.end(), 1);
+    int result_max =   *thrust::max_element(vec.begin(), vec.end());
+    int result_min =   *thrust::min_element(vec.begin(), vec.end());
+    int result_innerProduct = thrust::inner_product(vec.begin(), vec.end(),
+                                                    vec.begin(), 
+                                                    0);
+    bool result_isSorted = thrust::is_sorted(vec.begin(), vec.end());
+
+    std::cout << "Input vector: ";
     thrust::copy(vec.begin(), vec.end(), std::ostream_iterator<int>(std::cout, " "));
     std::cout << std::endl;
-    std::cout << result << std::endl;
+    std::cout << "Number of 1s in this vector: " << result_count << std::endl;
+    std::cout << "Max element in this vector: " << result_max << std::endl;
+    std::cout << "Min element in this vector: " << result_min << std::endl;
+    std::cout << "Inner product of this vector: " << result_innerProduct << std::endl;
+    std::cout << "Is this vector sorted?: " << result_isSorted << std::endl;
+};
+
+
+// square<T> computes the square of a number f(x) -> x*x
+template <typename T>
+struct square
+{
+  __host__ __device__
+  T operator()(const T& x) const
+  { 
+    return x * x;
+  }
+};
+
+void exmpl_thrust_transform_reduce() {
+
+    std::cout << std::endl << "In this example we show transform-reduce functionality of thrust:" << std::endl;
+
+    // generate sequence
+    thrust::device_vector<float> d_x(20);
+    thrust::sequence(d_x.begin(), d_x.end());
+
+    // setup arguments
+    square<float>        unary_op;
+    thrust::plus<float> binary_op;
+    float init = 0;
+
+    // compute norm
+    float norm = std::sqrt( thrust::transform_reduce(d_x.begin(), d_x.end(), unary_op, init, binary_op) );
+
+    std::cout << "Input vector: ";
+    thrust::copy(d_x.begin(), d_x.end(), std::ostream_iterator<float>(std::cout, " "));
+    std::cout << "Norm of this vector is: " << norm << std::endl;
 };
