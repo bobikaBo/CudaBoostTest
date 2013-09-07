@@ -8,6 +8,8 @@
 #include <thrust/fill.h>
 #include <thrust/replace.h>
 #include <thrust/functional.h>
+#include <thrust/count.h>
+
 #include <iostream>
 #include "Examples_Thrust.h"
 
@@ -48,6 +50,8 @@ void saxpy_slow(float A, thrust::device_vector<float>& X, thrust::device_vector<
 // transformations example
 void exmpl_thrust_transformations() {
     
+    std::cout << std::endl << "In this example we show the transformation functionality of thrust:" << std::endl;
+
     // allocate three device_vectors with 10 elements
     thrust::device_vector<int> X(10);
     thrust::device_vector<int> Y(10);
@@ -82,4 +86,23 @@ void exmpl_thrust_transformations() {
     std::cout << std::endl;
     thrust::copy(C.begin(), C.end(), std::ostream_iterator<float>(std::cout, " "));
     std::cout << std::endl;
+};
+
+
+void exmpl_thrust_reduce() {
+
+    std::cout << std::endl << "In this example we show reduce functionality of thrust:" << std::endl;
+
+    // put three 1s in a device_vector
+    thrust::device_vector<int> vec(5,0);
+    vec[1] = 1;
+    vec[3] = 1;
+    vec[4] = 1;
+
+    // count the 1s
+    int result = thrust::count(vec.begin(), vec.end(), 1);
+    std::cout << "Number of 1s in this vector: ";
+    thrust::copy(vec.begin(), vec.end(), std::ostream_iterator<int>(std::cout, " "));
+    std::cout << std::endl;
+    std::cout << result << std::endl;
 };

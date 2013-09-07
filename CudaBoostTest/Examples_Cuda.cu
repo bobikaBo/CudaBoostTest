@@ -72,6 +72,9 @@ void RunCubeKernel(vector<float>& data, vector<float>& result)
 }
 
 void exmpl_cuda_cube() {
+
+    std::cout << std::endl << "In this example we show parallelism functionality of Cuda by calculating cubes of numbers from 1 to "<< MaxSize << ":" << std::endl;
+
     std::cout << "In main." << std::endl; 
  
     // Create sample data 
@@ -87,6 +90,7 @@ void exmpl_cuda_cube() {
  
     for (int i = 0; i < MaxSize; ++i) 
     { 
-        cout << cube[i] << endl; 
+        cout << cube[i] << " "; 
     }
+    cout << endl;
 }
