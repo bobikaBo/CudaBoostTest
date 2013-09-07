@@ -15,12 +15,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Examples1.h">
+    <ClInclude Include="Examples_Thrust.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Examples_Cuda.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Examples_Boost.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="Examples1.cu" />
     <CudaCompile Include="Program.cu" />
+    <CudaCompile Include="Examples_Thrust.cu" />
+    <CudaCompile Include="Examples_Cuda.cu" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Examples_Boost.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

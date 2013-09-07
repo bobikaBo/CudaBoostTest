@@ -155,15 +155,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CudaCompile Include="Examples1.cu">
+    <CudaCompile Include="Examples_Thrust.cu">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </CudaCompile>
+    <CudaCompile Include="Examples_Cuda.cu" />
     <CudaCompile Include="Program.cu">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </CudaCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Examples1.h" />
+    <ClInclude Include="Examples_Thrust.h" />
+    <ClInclude Include="Examples_Cuda.h" />
+    <ClInclude Include="Examples_Boost.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Examples_Boost.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -9,7 +9,7 @@
 #include <thrust/replace.h>
 #include <thrust/functional.h>
 #include <iostream>
-#include "Examples1.h"
+#include "Examples_Thrust.h"
 
 
 struct saxpy_functor
