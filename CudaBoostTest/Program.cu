@@ -24,7 +24,7 @@ int main(void)
     std::cout << "Thrust v" << major << "." << minor << std::endl;
     
     exmpl_cuda_cube();
-    exmpl_transformations();
+    exmpl_thrust_transformations();
     exmpl_boost_foreach();
  
     return 0; 

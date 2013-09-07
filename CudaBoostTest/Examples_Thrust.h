@@ -1,3 +1,3 @@
 
 
-void exmpl_transformations();
+void exmpl_thrust_transformations();

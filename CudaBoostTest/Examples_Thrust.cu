@@ -46,7 +46,7 @@ void saxpy_slow(float A, thrust::device_vector<float>& X, thrust::device_vector<
 }
 
 // transformations example
-void exmpl_transformations() {
+void exmpl_thrust_transformations() {
     
     // allocate three device_vectors with 10 elements
     thrust::device_vector<int> X(10);
