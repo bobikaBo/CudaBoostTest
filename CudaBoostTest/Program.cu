@@ -11,6 +11,7 @@
 #include "Examples_Thrust.h"
 #include "Examples_Cuda.h"
 #include "Examples_Boost.h"
+#include "Example_MC_Pi.h"
  
  
 // Main entry into the program 
@@ -23,11 +24,22 @@ int main(void)
 
     std::cout << "Thrust v" << major << "." << minor << std::endl;
     
-    exmpl_cuda_cube();
+    /*exmpl_cuda_cube();
+
     exmpl_thrust_transformations();
+
     exmpl_thrust_reduce();
+
     exmpl_thrust_transform_reduce();
+
     exmpl_thrust_scan();
+
+    exmpl_thrust_sort();
+
+    exmpl_thrust_zip_iterator();
+    */
+    exmpl_thrust_MC_pi();
+
     exmpl_boost_foreach();
 
  

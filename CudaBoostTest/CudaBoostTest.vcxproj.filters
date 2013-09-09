@@ -24,11 +24,17 @@
     <ClInclude Include="Examples_Boost.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Example_MC_Pi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="Program.cu" />
     <CudaCompile Include="Examples_Thrust.cu" />
     <CudaCompile Include="Examples_Cuda.cu" />
+    <CudaCompile Include="Example_MC_Pi.cu">
+      <Filter>Source Files</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Examples_Boost.cpp">

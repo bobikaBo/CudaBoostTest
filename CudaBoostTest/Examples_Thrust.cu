@@ -12,7 +12,10 @@
 #include <thrust/inner_product.h>
 #include <thrust/sort.h>
 #include <thrust/scan.h>
+#include <thrust/sort.h>
+#include <thrust/iterator/zip_iterator.h>
 
+#include <tuple>
 #include <iostream>
 #include "Examples_Thrust.h"
 
@@ -180,4 +183,57 @@ void exmpl_thrust_scan() {
     std::cout << "Exclusive scan: ";
     thrust::copy(d_es.begin(), d_es.end(), std::ostream_iterator<float>(std::cout, " "));
     std::cout << std::endl;
+};
+
+
+
+void exmpl_thrust_sort() {
+    std::cout << std::endl << "In this example we show sorting functionality of thrust:" << std::endl;    
+
+    const int N = 6;
+    int    keys[N] = {  1,   4,   2,   8,   5,   7};
+    char values[N] = {'a', 'b', 'c', 'd', 'e', 'f'};
+
+    std::cout << "Key vector: ";
+    for (int i = 0; i < N; ++i) {
+        std::cout << keys[i] << " ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "Value vector: ";
+    for (int i = 0; i < N; ++i) {
+        std::cout << values[i] << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "Value vector after sorting: ";
+
+    thrust::sort_by_key(keys, keys + N, values);
+
+    for (int i = 0; i < N; ++i) {
+        std::cout << values[i] << " ";
+    }
+    std::cout << std::endl;
+};
+
+void exmpl_thrust_zip_iterator() {
+    
+    // initialize vectors
+    thrust::device_vector<int>  A(3);
+    thrust::device_vector<char> B(3);
+    A[0] = 10;  A[1] = 20;  A[2] = 30;
+    B[0] = 'x'; B[1] = 'y'; B[2] = 'z';    
+
+    // create iterator
+    typedef thrust::device_vector<int>::iterator IntIterator;
+    typedef thrust::device_vector<char>::iterator CharIterator;
+    typedef  thrust::zip_iterator<thrust::tuple<IntIterator, CharIterator> > intCharTupleIterator;
+
+    intCharTupleIterator first = thrust::make_zip_iterator(thrust::make_tuple(A.begin(), B.begin()));
+    intCharTupleIterator last  = thrust::make_zip_iterator(thrust::make_tuple(A.end(),   B.end()));
+
+    thrust::maximum< thrust::tuple<int,char> > binary_op;
+    thrust::tuple<int,char> init = first[0];
+    thrust::tuple<int, char> result = thrust::reduce(first, last, init, binary_op);
+
+    std::cout << "(" << thrust::get<0>(result) << ", " << thrust::get<1>(result) <<")" << std::endl; 
 };

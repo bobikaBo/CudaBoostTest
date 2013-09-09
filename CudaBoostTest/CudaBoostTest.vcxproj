@@ -82,6 +82,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.5\include;H:\programs\boost\boost_1_54_0;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.5\lib\x64;H:\programs\boost\boost_1_54_0\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -167,9 +169,13 @@
     <ClInclude Include="Examples_Thrust.h" />
     <ClInclude Include="Examples_Cuda.h" />
     <ClInclude Include="Examples_Boost.h" />
+    <ClInclude Include="Example_MC_Pi.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Examples_Boost.cpp" />
+    <CudaCompile Include="Example_MC_Pi.cu">
+      <FileType>CppCode</FileType>
+    </CudaCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
