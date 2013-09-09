@@ -27,6 +27,7 @@ int main(void)
     exmpl_thrust_transformations();
     exmpl_thrust_reduce();
     exmpl_thrust_transform_reduce();
+    exmpl_thrust_scan();
     exmpl_boost_foreach();
 
  

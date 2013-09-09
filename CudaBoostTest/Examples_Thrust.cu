@@ -11,6 +11,7 @@
 #include <thrust/count.h>
 #include <thrust/inner_product.h>
 #include <thrust/sort.h>
+#include <thrust/scan.h>
 
 #include <iostream>
 #include "Examples_Thrust.h"
@@ -150,5 +151,33 @@ void exmpl_thrust_transform_reduce() {
 
     std::cout << "Input vector: ";
     thrust::copy(d_x.begin(), d_x.end(), std::ostream_iterator<float>(std::cout, " "));
-    std::cout << "Norm of this vector is: " << norm << std::endl;
+    std::cout << std::endl << "Norm of this vector is: " << norm << std::endl;
+};
+
+void exmpl_thrust_scan() {
+    
+    std::cout << std::endl << "In this example we show scan functionality of thrust:" << std::endl;
+    // generate sequence
+    thrust::device_vector<float> d_x(10);
+    thrust::sequence(d_x.begin(), d_x.end());
+
+    thrust::device_vector<float> d_is(d_x.size());
+    thrust::device_vector<float> d_es(d_x.size());
+
+    // perform inclusive scan
+    thrust::inclusive_scan(d_x.begin(), d_x.end(), d_is.begin());
+    // perform exclusive scan
+    thrust::exclusive_scan(d_x.begin(), d_x.end(), d_es.begin());
+
+    std::cout << "Input vector: ";
+    thrust::copy(d_x.begin(), d_x.end(), std::ostream_iterator<float>(std::cout, " "));
+    std::cout << std::endl;
+
+    std::cout << "Inclusive scan: ";
+    thrust::copy(d_is.begin(), d_is.end(), std::ostream_iterator<float>(std::cout, " "));
+    std::cout << std::endl;
+
+    std::cout << "Exclusive scan: ";
+    thrust::copy(d_es.begin(), d_es.end(), std::ostream_iterator<float>(std::cout, " "));
+    std::cout << std::endl;
 };
