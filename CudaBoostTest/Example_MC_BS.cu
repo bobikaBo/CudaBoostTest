@@ -5,17 +5,17 @@
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/functional.h>
 #include <thrust/transform_reduce.h>
+#include <thrust/random/normal_distribution.h>
 
 #include <iostream>
 #include <iomanip>
 #include <cmath>
 
-#include "Example_MC_Pi.h"
+#include "Example_MC_BS.cuh"
 
-// we could vary M & N to find the perf sweet spot
 
 __host__ __device__
-unsigned int hash(unsigned int a)
+unsigned int hashBS(unsigned int a)
 {
     a = (a+0x7ed55d16) + (a<<12);
     a = (a^0xc761c23c) ^ (a>>19);
@@ -26,58 +26,61 @@ unsigned int hash(unsigned int a)
     return a;
 }
 
-struct estimate_pi : public thrust::unary_function<unsigned int,float>
+struct estimate_BS : public thrust::unary_function<unsigned int,float>
 {
-  __host__ __device__
+  __device__
   float operator()(unsigned int thread_id)
   {
     float sum = 0;
     unsigned int N = 100000; // samples per thread
 
-    unsigned int seed = hash(thread_id);
+    unsigned int seed = thread_id;
 
     // seed a random number generator
     thrust::default_random_engine rng(seed);
 
-    // create a mapping from random numbers to [0,1)
-    thrust::uniform_real_distribution<float> u01(0,1);
+    // create a mapping from random numbers to N(0,1)
+    thrust::random::normal_distribution<float> ndist(0.0f, 1.0f);
+
+    float S0 = 20.0f;
+    float sig = 0.28f;
+    float r = 0.045f;
+    float K = 21.0f;
+    float T = 0.5f;
+
+    float sqrtT = sqrtf(T);
+    float sig2 = sig*sig;
 
     // take N samples in a quarter circle
     for(unsigned int i = 0; i < N; ++i)
     {
-      // draw a sample from the unit square
-      float x = u01(rng);
-      float y = u01(rng);
-
-      // measure distance from the origin
-      float dist = sqrtf(x*x + y*y);
-
-      // add 1.0f if (u0,u1) is inside the quarter circle
-      if(dist <= 1.0f)
-        sum += 1.0f;
+      float W = ndist(rng);
+      float ST =    S0 * expf((r - 0.5f*sig2)*T + sig*sqrtT*W);
+      float ST_at = S0 * expf((r - 0.5f*sig2)*T - sig*sqrtT*W);
+      sum += (((ST-K > 0.0f)? ST-K:0.0f) + ((ST_at-K > 0.0f)? ST_at-K:0.0f))/2.0f;
     }
 
-    // multiply by 4 to get the area of the whole circle
-    sum *= 4.0f;
+    // discount back
+    sum *= expf(-r*T);
 
     // divide by N
     return sum / N;
   }
 };
 
-void exmpl_thrust_MC_pi()
+void exmpl_thrust_MC_BS()
 {
   // use 30K independent seeds
-  int M = 30000;
+  int M = 50000;
 
   float estimate = thrust::transform_reduce(thrust::counting_iterator<int>(0),
                                             thrust::counting_iterator<int>(M),
-                                            estimate_pi(),
+                                            estimate_BS(),
                                             0.0f,
                                             thrust::plus<float>());
   estimate /= M;
 
   std::cout << std::setprecision(10);
-  std::cout << "pi is approximately " << estimate << std::endl;
-
+  std::cout << "Option price is approximately " << estimate << std::endl;
+  cudaDeviceReset();
 };

@@ -35,10 +35,24 @@
     <CudaCompile Include="Example_MC_Pi.cu">
       <Filter>Source Files</Filter>
     </CudaCompile>
+    <CudaCompile Include="Example_MC_BS.cu">
+      <Filter>Source Files</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Example_MC_BS2.cu">
+      <Filter>Source Files</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Example_MC_BS3.cu">
+      <Filter>Source Files</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Examples_Boost.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Example_MC_BS.cuh">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

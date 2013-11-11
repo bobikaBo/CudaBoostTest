@@ -12,6 +12,7 @@
 #include "Examples_Cuda.h"
 #include "Examples_Boost.h"
 #include "Example_MC_Pi.h"
+#include "Example_MC_BS.cuh"
  
  
 // Main entry into the program 
@@ -37,8 +38,14 @@ int main(void)
     exmpl_thrust_sort();
 
     exmpl_thrust_zip_iterator();
-    */
+    
     exmpl_thrust_MC_pi();
+    */
+
+    exmpl_thrust_MC_BS();
+    exmpl_thrust_MC_BS2();
+    exmpl_thrust_MC_BS3();
+
 
     exmpl_boost_foreach();
 
